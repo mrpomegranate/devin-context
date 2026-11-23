@@ -21,7 +21,7 @@ function parseArgs(values) {
 }
 
 function usage() {
-  return `Usage: ndc <command> [options]
+  return `Usage: devin-context <command> [options]
 
 Commands:
   init
@@ -121,6 +121,6 @@ function main() {
 try {
   main();
 } catch (error) {
-  process.stderr.write(`ndc: ${error.message}\n`);
+  process.stderr.write(`devin-context: ${error.message}\n`);
   process.exitCode = 1;
 }

@@ -7,7 +7,7 @@ const { DEFAULTS } = require('../src/config');
 const { detectProvider, resolveSpec } = require('../src/providers');
 
 function fixture() {
-  return fs.mkdtempSync(path.join(os.tmpdir(), 'ndc-provider-'));
+  return fs.mkdtempSync(path.join(os.tmpdir(), 'devin-context-provider-'));
 }
 
 test('detects OpenSpec and resolves its change artifacts', () => {

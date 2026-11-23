@@ -47,7 +47,7 @@ function buildContextPack({ projectRoot, config, paths, task = '', specId, limit
 
 function renderContextPack(pack) {
   const lines = [
-    '# NGC Devin Context Pack',
+    '# Devin Context Pack',
     '',
     `- Generated: ${pack.generatedAt}`,
     `- Task: ${pack.task || '(not provided)'}`,

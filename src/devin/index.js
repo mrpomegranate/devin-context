@@ -2,34 +2,34 @@ const fs = require('node:fs');
 const path = require('node:path');
 const { stringifyConfig } = require('../config');
 
-const START = '<!-- NGC-DEVIN-CONTEXT:START -->';
-const END = '<!-- NGC-DEVIN-CONTEXT:END -->';
+const START = '<!-- DEVIN-CONTEXT:START -->';
+const END = '<!-- DEVIN-CONTEXT:END -->';
 
 function agentsBlock() {
   return `${START}
-# NGC Devin Context
+# Devin Context
 
-For non-trivial work, run \`ndc brief --task "<task summary>"\` before planning or editing.
+For non-trivial work, run \`devin-context brief --task "<task summary>"\` before planning or editing.
 If the work maps to an OpenSpec or Spec-Kitty change, include \`--spec <id>\`.
 Treat resolved specification artifacts as authoritative for feature requirements.
-After validation, use \`ndc closeout\` to create a reviewable knowledge proposal when work produced a reusable decision, handoff, runbook, or lesson.
-Never store secrets in NGC Devin Context records.
+After validation, use \`devin-context closeout\` to create a reviewable knowledge proposal when work produced a reusable decision, handoff, runbook, or lesson.
+Never store secrets in Devin Context records.
 ${END}`;
 }
 
 function skillTemplate() {
   return `---
-name: ngc-devin-context
-description: Load NGC Devin Context before non-trivial repository work and propose reviewed knowledge after validation.
+name: devin-context
+description: Load Devin Context before non-trivial repository work and propose reviewed knowledge after validation.
 ---
 
-# NGC Devin Context Workflow
+# Devin Context Workflow
 
-1. Start non-trivial work with \`ndc brief --task "<task summary>"\`.
+1. Start non-trivial work with \`devin-context brief --task "<task summary>"\`.
 2. Add \`--spec <id>\` when a change ID is known.
 3. Read the Context Pack before making plans or edits.
 4. Treat linked OpenSpec or Spec-Kitty files as the authority for requirements, design, and tasks.
-5. After validation, run \`ndc closeout\` for reusable knowledge. It creates a proposal; do not claim it is durable until a human approves it.
+5. After validation, run \`devin-context closeout\` for reusable knowledge. It creates a proposal; do not claim it is durable until a human approves it.
 6. Do not write secrets, credentials, or sensitive values to context records.
 `;
 }

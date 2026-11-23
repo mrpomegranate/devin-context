@@ -1,4 +1,4 @@
-# NGC Devin Context Development
+# Devin Context Development
 
 - Use Node.js 20 or later.
 - Run `npm test` before completing code changes.

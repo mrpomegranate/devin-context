@@ -12,9 +12,9 @@ function writeRecord(root, title, id, body) {
 }
 
 test('project records override global records with the same stable ID', () => {
-  const root = fs.mkdtempSync(path.join(os.tmpdir(), 'ndc-context-'));
+  const root = fs.mkdtempSync(path.join(os.tmpdir(), 'devin-context-context-'));
   const projectRoot = path.join(root, 'project');
-  const env = { ...process.env, NGC_DEVIN_HOME: path.join(root, 'global') };
+  const env = { ...process.env, DEVIN_CONTEXT_HOME: path.join(root, 'global') };
   const paths = getPaths(projectRoot, env);
   fs.mkdirSync(projectRoot, { recursive: true });
   writeRecord(paths.projectKnowledge, 'project-retry', 'record-1', 'Project retry guidance');

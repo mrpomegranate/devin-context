@@ -2,12 +2,12 @@ const os = require('node:os');
 const path = require('node:path');
 
 function getGlobalRoot(env = process.env) {
-  return env.NGC_DEVIN_HOME || path.join(os.homedir(), '.config', 'ngc-devin');
+  return env.DEVIN_CONTEXT_HOME || path.join(os.homedir(), '.config', 'devin-context');
 }
 
 function getPaths(projectRoot = process.cwd(), env = process.env) {
   const globalRoot = getGlobalRoot(env);
-  const projectConfigRoot = path.join(projectRoot, '.ngc-devin');
+  const projectConfigRoot = path.join(projectRoot, '.devin-context');
   return {
     globalRoot,
     globalConfig: path.join(globalRoot, 'config.yaml'),
@@ -17,7 +17,7 @@ function getPaths(projectRoot = process.cwd(), env = process.env) {
     projectConfig: path.join(projectConfigRoot, 'config.yaml'),
     projectKnowledge: path.join(projectConfigRoot, 'knowledge'),
     projectProposals: path.join(projectConfigRoot, 'proposals'),
-    projectSkill: path.join(projectRoot, '.devin', 'skills', 'ngc-devin-context', 'SKILL.md'),
+    projectSkill: path.join(projectRoot, '.devin', 'skills', 'devin-context', 'SKILL.md'),
     agents: path.join(projectRoot, 'AGENTS.md')
   };
 }

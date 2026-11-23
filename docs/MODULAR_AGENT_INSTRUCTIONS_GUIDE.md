@@ -35,7 +35,7 @@ Instead of dumping everything into one huge file or leaving the agent without co
          ┌─────────────────────────────────┼─────────────────────────────────┐
          ▼                                 ▼                                 ▼
 ┌──────────────────┐             ┌──────────────────┐             ┌──────────────────┐
-│  Nested Rules    │             │      docs/       │             │   .ngc-devin/    │
+│  Nested Rules    │             │      docs/       │             │ .devin-context/  │
 │ (Tier 2: Scoped) │             │ (Tier 3: Deep)   │             │ (Tier 4: Memory) │
 ├──────────────────┤             ├──────────────────┤             ├──────────────────┤
 │ src/<mod>/       │             │ Deep reference   │             │ Dynamic, evolving│
@@ -53,7 +53,7 @@ Instead of dumping everything into one huge file or leaving the agent without co
 | **Tier 1: Root Hub** | `AGENTS.md` | **Every single session** | Core check commands, language versions, non-negotiable safety rules. |
 | **Tier 2: Scoped Module Rules** | `src/<module>/AGENTS.md` | **When working inside that module** | Colocated domain rules (e.g. telemetry formulas, API schemas, DB rules). |
 | **Tier 3: Deep Guides** | `docs/*.md` | **On-demand** (referenced by agent) | Architecture maps, repo setup guide, glossary, complex algorithms. |
-| **Tier 4: Dynamic Memory** | `.ngc-devin/knowledge/` | **Retrieved via `ndc brief`** | Evolving team decisions, debugging lessons, daily handoffs. |
+| **Tier 4: Dynamic Memory** | `.devin-context/knowledge/` | **Retrieved via `devin-context brief`** | Evolving team decisions, debugging lessons, daily handoffs. |
 
 ---
 
@@ -78,9 +78,9 @@ Instead of dumping everything into one huge file or leaving the agent without co
 2. **Write minimum code**: No speculative layers, unused helpers, or single-use interfaces.
 3. **Fail fast (no silent fallbacks)**: Fail immediately on invalid state or missing config; never swallow errors or return dummy defaults.
 4. **Pure core, validated boundaries**: Validate at API/file boundaries; keep internal domain logic pure.
-5. **Context retrieval**: For non-trivial tasks, run `ndc brief --task "<summary>"` before modifying code.
+5. **Context retrieval**: For non-trivial tasks, run `devin-context brief --task "<summary>"` before modifying code.
 6. **Nested module rules**: Before modifying files in any subpackage, check if `src/<module>/AGENTS.md` exists and follow its domain rules. Root safety rules always take precedence.
-7. **Creating & updating module rules**: When establishing a permanent rule or constraint for a subpackage, create `src/<module>/AGENTS.md` (or update it if it exists) to document its ownership, allowed imports, and domain constraints, and record an accompanying decision via `ndc decision create`.
+7. **Creating & updating module rules**: When establishing a permanent rule or constraint for a subpackage, create `src/<module>/AGENTS.md` (or update it if it exists) to document its ownership, allowed imports, and domain constraints, and record an accompanying decision via `devin-context decision create`.
 
 ## 3. Deep Reference Guides
 Read these files when working on relevant tasks:
@@ -131,7 +131,7 @@ $$\text{Root AGENTS.md (Inviolable Guardrails)} \;\;>\;\; \text{Nested Module AG
 
 ---
 
-### Pairing Module `AGENTS.md` with NDC Decisions (The Pair Pattern)
+### Pairing Module `AGENTS.md` with Devin Context Decisions (The Pair Pattern)
 
 When Devin discovers or establishes a new rule for a module during a task:
 
@@ -149,19 +149,19 @@ When Devin discovers or establishes a new rule for a module during a task:
                                      │
                                      ▼
  ┌────────────────────────────────────────────────────────────────────────┐
- │ 3. Devin runs `ndc decision create` to index the rationale in NDC:     │
- │    $ ndc decision create "Enforce 5s sensor polling timeout" ...       │
+ │ 3. Devin records the rationale with Devin Context:                     │
+ │     $ devin-context decision create "poll timeout" ...                 │
  └───────────────────────────────────┬────────────────────────────────────┘
                                      │
                                      ▼
  ┌────────────────────────────────────────────────────────────────────────┐
- │ 4. You review the PR diff, run `ndc approve`, and merge!               │
+ │ 4. Review the PR, run `devin-context approve`, and merge!              │
  └────────────────────────────────────────────────────────────────────────┘
 ```
 
-#### Zero Conflicts with Spec-Kitty or NDC
+#### Zero Conflicts with Spec-Kitty or Devin Context
 - **Spec-Kitty**: Only modifies `.kittify/` and the `spec-kitty:orientation` block in the **root** `AGENTS.md`. It never touches `src/<module>/AGENTS.md`.
-- **NDC (`ndc`)**: Only manages its own block in the root `AGENTS.md` and indexes knowledge in `.ngc-devin/knowledge/`.
+- **Devin Context (`devin-context`)**: Only manages its own block in the root `AGENTS.md` and indexes knowledge in `.devin-context/knowledge/`.
 - **Module `AGENTS.md`**: Stays purely in your version-controlled source tree.
 
 ---
@@ -176,21 +176,21 @@ When Devin discovers or establishes a new rule for a module during a task:
 
 ---
 
-### Tier 4: Evolving Team Memory (`.ngc-devin/`)
+### Tier 4: Evolving Team Memory (`.devin-context/`)
 
-**Why this matters:** Static `.md` files should not be edited on the fly during coding sessions. For decisions made during implementation (e.g., *"We chose Redis over Memcached for token caching"*), use **`ndc`**.
+**Why this matters:** Static `.md` files should not be edited on the fly during coding sessions. For decisions made during implementation (e.g., *"We chose Redis over Memcached for token caching"*), use **`devin-context`**.
 
 ```text
   Developer Prompt / Implementation Discovery
                        │
                        ▼
-         ndc decision create "Use Redis"
+         devin-context decision create "Use Redis"
                        │
                        ▼
-       Human Review: ndc approve <file>
+       Human Review: devin-context approve <file>
                        │
                        ▼
-   .ngc-devin/knowledge/decisions/2026-11-22-use-redis.md
+   .devin-context/knowledge/decisions/2026-11-22-use-redis.md
                        │
                        ▼
    Permanently searchable by future Devin sessions!
@@ -207,7 +207,7 @@ When Devin discovers or establishes a new rule for a module during a task:
 │ Token Cost per Prompt  │ High (Entire file loaded always) │ Minimal (~30 lines loaded)       │
 │ Agent Focus / Accuracy │ Medium (Noise causes confusion)  │ High (Only relevant rules load)  │
 │ Ease of Maintenance   │ Hard (One giant, messy file)     │ Clean (Domain-specific files)    │
-│ Multi-Session Memory   │ Weak (Manual prompt re-typing)   │ Strong (Automated via ndc)       │
+│ Multi-Session Memory   │ Weak (Manual prompt re-typing)   │ Strong (Automatic)              │
 │ Scalability across PRs │ Degrades over time               │ Scales indefinitely              │
 └────────────────────────┴──────────────────────────────────┴──────────────────────────────────┘
 ```
@@ -220,4 +220,4 @@ When creating a new repository:
 1. **`AGENTS.md`**: Add the concise ~40-line root hub with verification commands and the nested module directive.
 2. **`src/<module>/AGENTS.md`**: Add domain-specific rules inside subpackages where needed.
 3. **`docs/`**: Add deep reference guides (`AGENTIC_REPO_SETUP_GUIDE.md`, `architecture.md`).
-4. **`ndc init`**: Initialize NGC Devin Context for dynamic decision-making and handoffs.
+4. **`devin-context init`**: Initialize Devin Context for dynamic decision-making and handoffs.

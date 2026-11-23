@@ -1,10 +1,10 @@
 # OpenSpec and Spec-Kitty Integrations
 
-NGC Devin Context does not replace a specification workflow.
+Devin Context does not replace a specification workflow.
 
 - OpenSpec or Spec-Kitty owns a change's requirements, design, implementation
   plan, tasks, and acceptance criteria.
-- NGC Devin Context links the relevant artifacts into a Context Pack alongside
+- Devin Context links the relevant artifacts into a Context Pack alongside
   durable decisions, handoffs, runbooks, lessons, and evidence.
 
 ## Detection
@@ -16,7 +16,7 @@ The MVP uses configurable local markers:
 | OpenSpec | `openspec` |
 | Spec-Kitty | `.specify` |
 
-These defaults can be changed in `.ngc-devin/config.yaml`. `ndc spec detect`
+These defaults can be changed in `.devin-context/config.yaml`. `devin-context spec detect`
 performs no writes.
 
 | Result | Behavior |
@@ -27,7 +27,7 @@ performs no writes.
 
 ## Resolving a specification
 
-For OpenSpec, `ndc brief --spec <id>` looks first for
+For OpenSpec, `devin-context brief --spec <id>` looks first for
 `openspec/changes/<id>`, then `openspec/<id>`.
 
 For Spec-Kitty, it looks first for `.specify/specs/<id>`, then

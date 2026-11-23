@@ -1,7 +1,7 @@
 node_modules/
 coverage/
-.ngc-devin/index.sqlite
-.ngc-devin/audit/
+.devin-context/index.sqlite
+.devin-context/audit/
 dist/
 build/
 *.egg-info/

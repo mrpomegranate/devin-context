@@ -13,7 +13,7 @@ const DEFAULTS = {
     }
   },
   knowledge: {
-    projectRoot: '.ngc-devin/knowledge',
+    projectRoot: '.devin-context/knowledge',
     globalRoot: null,
     includeGlobal: true
   },

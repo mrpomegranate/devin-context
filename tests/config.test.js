@@ -6,18 +6,18 @@ const test = require('node:test');
 const { loadConfig } = require('../src/config');
 
 function fixture() {
-  const root = fs.mkdtempSync(path.join(os.tmpdir(), 'ndc-config-'));
+  const root = fs.mkdtempSync(path.join(os.tmpdir(), 'devin-context-config-'));
   const projectRoot = path.join(root, 'project');
   const globalRoot = path.join(root, 'global');
-  fs.mkdirSync(path.join(projectRoot, '.ngc-devin'), { recursive: true });
+  fs.mkdirSync(path.join(projectRoot, '.devin-context'), { recursive: true });
   fs.mkdirSync(globalRoot, { recursive: true });
-  return { root, projectRoot, globalRoot, env: { ...process.env, NGC_DEVIN_HOME: globalRoot } };
+  return { root, projectRoot, globalRoot, env: { ...process.env, DEVIN_CONTEXT_HOME: globalRoot } };
 }
 
 test('project configuration overrides global defaults but not enforced policy', () => {
   const { projectRoot, globalRoot, env } = fixture();
   fs.writeFileSync(path.join(globalRoot, 'config.yaml'), `integration:\n  provider: openspec\npolicy:\n  allowGlobalSearch: false\n  enforced:\n    - policy.allowGlobalSearch\n`);
-  fs.writeFileSync(path.join(projectRoot, '.ngc-devin', 'config.yaml'), `integration:\n  provider: spec-kitty\npolicy:\n  allowGlobalSearch: true\n`);
+  fs.writeFileSync(path.join(projectRoot, '.devin-context', 'config.yaml'), `integration:\n  provider: spec-kitty\npolicy:\n  allowGlobalSearch: true\n`);
 
   const { config, sources } = loadConfig({ projectRoot, env });
 
@@ -28,7 +28,7 @@ test('project configuration overrides global defaults but not enforced policy', 
 
 test('project configuration cannot redirect the global knowledge root', () => {
   const { projectRoot, globalRoot, env } = fixture();
-  fs.writeFileSync(path.join(projectRoot, '.ngc-devin', 'config.yaml'), `knowledge:\n  globalRoot: /unapproved\n`);
+  fs.writeFileSync(path.join(projectRoot, '.devin-context', 'config.yaml'), `knowledge:\n  globalRoot: /unapproved\n`);
 
   const { config, sources } = loadConfig({ projectRoot, env });
 

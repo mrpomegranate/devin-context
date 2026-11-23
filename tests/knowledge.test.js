@@ -8,11 +8,11 @@ const { initializeProject } = require('../src/devin');
 const { approveProposal, listRecords, writeProposal } = require('../src/knowledge');
 
 function fixture() {
-  const root = fs.mkdtempSync(path.join(os.tmpdir(), 'ndc-knowledge-'));
+  const root = fs.mkdtempSync(path.join(os.tmpdir(), 'devin-context-knowledge-'));
   const projectRoot = path.join(root, 'project');
   const globalRoot = path.join(root, 'global');
   fs.mkdirSync(projectRoot, { recursive: true });
-  return { projectRoot, env: { ...process.env, NGC_DEVIN_HOME: globalRoot } };
+  return { projectRoot, env: { ...process.env, DEVIN_CONTEXT_HOME: globalRoot } };
 }
 
 test('initialization preserves existing AGENTS content and creates the Devin skill', () => {
@@ -22,9 +22,12 @@ test('initialization preserves existing AGENTS content and creates the Devin ski
 
   initializeProject(paths, { integration: { provider: 'auto', roots: { openspec: 'openspec', specKitty: '.specify' } }, validation: { commands: [] } });
 
-  assert.match(fs.readFileSync(paths.agents, 'utf8'), /# Existing guidance/);
-  assert.match(fs.readFileSync(paths.agents, 'utf8'), /NGC-DEVIN-CONTEXT:START/);
+  const agents = fs.readFileSync(paths.agents, 'utf8');
+  assert.match(agents, /# Existing guidance/);
+  assert.match(agents, /DEVIN-CONTEXT:START/);
+  assert.match(agents, /devin-context brief/);
   assert.ok(fs.existsSync(paths.projectSkill));
+  assert.match(fs.readFileSync(paths.projectSkill, 'utf8'), /devin-context brief/);
 });
 
 test('project proposals require approval before becoming durable knowledge', () => {

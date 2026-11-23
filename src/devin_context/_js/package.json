@@ -1,0 +1,21 @@
+{
+  "name": "devin-context",
+  "version": "0.1.0",
+  "description": "Persistent, evidence-backed context for Devin",
+  "private": true,
+  "type": "commonjs",
+  "bin": {
+    "devin-context": "./bin/devin-context.js"
+  },
+  "scripts": {
+    "test": "node --test",
+    "lint": "node --check bin/devin-context.js && node --check src/config/index.js && node --check src/config/paths.js && node --check src/context/index.js && node --check src/devin/index.js && node --check src/knowledge/index.js && node --check src/providers/index.js",
+    "build:python": "node scripts/sync-python.js"
+  },
+  "engines": {
+    "node": ">=20"
+  },
+  "dependencies": {
+    "yaml": "2.9.1"
+  }
+}

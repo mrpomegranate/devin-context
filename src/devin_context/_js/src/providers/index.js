@@ -52,7 +52,7 @@ function referenceFor(filePath, projectRoot, provider, id) {
 function resolveSpec(projectRoot, config, id) {
   const detection = detectProvider(projectRoot, config);
   if (detection.status === 'ambiguous') {
-    throw new Error(`Multiple specification providers detected: ${detection.candidates.map((candidate) => candidate.name).join(', ')}. Set integration.provider in .ngc-devin/config.yaml.`);
+    throw new Error(`Multiple specification providers detected: ${detection.candidates.map((candidate) => candidate.name).join(', ')}. Set integration.provider in .devin-context/config.yaml.`);
   }
   if (!detection.provider) return { provider: null, id, artifacts: [] };
   const candidate = detection.candidates[0];

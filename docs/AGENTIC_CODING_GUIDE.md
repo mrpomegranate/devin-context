@@ -45,7 +45,7 @@ Before adding any file, function, class, type, config key or dependency:
 - Check if the target directory contains a nested `AGENTS.md` and follow its
   module-specific rules (root safety rules always take precedence). If establishing
   a permanent domain constraint, create `src/<module>/AGENTS.md` (or update it)
-  and record an accompanying decision via `ndc decision create`.
+  and record an accompanying decision via `devin-context decision create`.
 - Read one neighboring file in the target module and follow its structure.
 - Prefer a new implementation of an existing interface over a new interface,
   base class, factory or helper.

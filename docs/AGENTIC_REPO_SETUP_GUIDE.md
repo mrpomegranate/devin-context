@@ -15,7 +15,7 @@ my-new-repo/
 │   │   └── ci.yml                # Automated CI test & lint pipeline
 │   ├── CODEOWNERS                # Mandatory human review on sensitive code
 │   └── pull_request_template.md  # Standardized PR checklist & evidence format
-├── .ngc-devin/                   # NGC Devin Context (durable memory & decisions)
+├── .devin-context/               # Devin Context (durable memory & decisions)
 │   ├── config.yaml
 │   ├── knowledge/
 │   └── proposals/
@@ -57,12 +57,12 @@ Run verification tests before finishing any task:
 ## 4. Engineering & Architecture Rules
 - Follow existing directory structure and patterns in `src/`.
 - Check for nested module rules: Before modifying files in any subpackage, check if `src/<module>/AGENTS.md` exists and follow its domain rules. Root safety rules always take precedence.
-- Creating & updating module rules: When establishing a permanent rule or constraint for a subpackage, create `src/<module>/AGENTS.md` (or update it if it exists) and record an accompanying decision via `ndc decision create`.
+- Creating & updating module rules: When establishing a permanent rule or constraint for a subpackage, create `src/<module>/AGENTS.md` (or update it if it exists) and record an accompanying decision via `devin-context decision create`.
 - Fail fast: Fail immediately on invalid state or missing configuration; never write silent fallbacks or swallow exceptions.
 - Never hardcode credentials, tokens, passwords, or PII.
 - Keep unit tests hermetic (mock all external network requests using fixtures).
-- For non-trivial work, run `ndc brief --task "<summary>"` before modifying code.
-- Record any lasting technical or business decisions using `ndc decision create`.
+- For non-trivial work, run `devin-context brief --task "<summary>"` before modifying code.
+- Record any lasting technical or business decisions using `devin-context decision create`.
 
 ## 5. Git & PR Conventions
 - Work in dedicated feature branches (`feat/`, `fix/`).
@@ -208,17 +208,17 @@ uv run mypy src/
 
 ---
 
-## 3. Persistent Context & Memory (`ndc`)
+## 3. Persistent Context & Memory (`devin-context`)
 
-Prevent **"Agent Amnesia"** across sessions by initializing NGC Devin Context:
+Prevent **"Agent Amnesia"** across sessions by initializing Devin Context:
 
-### Step 1: Initialize NDC
+### Step 1: Initialize Devin Context
 ```bash
-ndc init
+devin-context init
 ```
-This automatically configures `.ngc-devin/config.yaml`, sets up knowledge folders (`decisions/`, `handoffs/`, `lessons/`), and installs the Devin project skill.
+This automatically configures `.devin-context/config.yaml`, sets up knowledge folders (`decisions/`, `handoffs/`, `lessons/`), and installs the Devin project skill.
 
-### Step 2: Configure Validation in `.ngc-devin/config.yaml`
+### Step 2: Configure Validation in `.devin-context/config.yaml`
 ```yaml
 version: 1
 integration:
@@ -341,9 +341,9 @@ Enforce structured pull requests so both humans and agents provide clear evidenc
 <!-- Why is this change necessary? Links to Jira / GitHub Issue / Spec ID -->
 
 ## Architectural Decisions Recorded
-<!-- List any .ngc-devin/knowledge/ decisions, handoffs, or lessons added -->
+<!-- List any .devin-context/knowledge/ decisions, handoffs, or lessons added -->
 - [ ] No new architectural decisions required
-- [ ] Recorded decision: `.ngc-devin/knowledge/decisions/...`
+- [ ] Recorded decision: `.devin-context/knowledge/decisions/...`
 
 ## Verification & Testing Evidence
 - [ ] Unit tests pass locally (`uv run pytest`)
@@ -364,7 +364,7 @@ Ensure critical areas require human approval:
 # Sensitive architecture, configuration, and CI
 /.github/workflows/   @lead-architect
 /src/config/          @lead-architect
-/.ngc-devin/          @lead-architect
+/.devin-context/          @lead-architect
 ```
 
 ---
@@ -379,7 +379,7 @@ When you create a brand-new repository, you can paste this exact prompt to Devin
 2. Create pyproject.toml with production dependencies in [project.dependencies], dev tools (pytest, ruff, mypy, pre-commit, build, twine) in [dependency-groups.dev], and optional extras in [project.optional-dependencies].
 3. Run `uv venv` and `uv lock && uv sync` to create the environment and lockfile.
 4. Create a clean AGENTS.md with explicit dependency classification rules and uv run verification commands.
-5. Initialize NGC Devin Context by running `ndc init` and configuring test commands in `.ngc-devin/config.yaml`.
+5. Initialize Devin Context by running `devin-context init` and configuring test commands in `.devin-context/config.yaml`.
 6. Add .pre-commit-config.yaml with gitleaks, ruff, and pre-commit-hooks.
 7. Add .github/pull_request_template.md and .github/CODEOWNERS.
 8. Add .github/workflows/ci.yml using astral-sh/setup-uv for automated testing and package verification.

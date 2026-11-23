@@ -1,12 +1,12 @@
 # Configuration
 
-NGC Devin Context loads configuration in this order:
+Devin Context loads configuration in this order:
 
 1. Built-in defaults
-2. `~/.config/ngc-devin/config.yaml`
-3. `<repository>/.ngc-devin/config.yaml`
+2. `~/.config/devin-context/config.yaml`
+3. `<repository>/.devin-context/config.yaml`
 
-Run `ndc config show --resolved --json` to inspect the effective
+Run `devin-context config show --resolved --json` to inspect the effective
 configuration and field provenance.
 
 ## Project configuration

@@ -1,6 +1,6 @@
-# NGC Devin Context: Complete Usage Guide
+# Devin Context: Complete Usage Guide
 
-**NGC Devin Context (`ndc`)** gives Devin durable memory across coding sessions, specification workflows, and repositories.
+**Devin Context**, available through the `devin-context` CLI, gives Devin durable memory across coding sessions, specification workflows, and repositories.
 
 ---
 
@@ -17,7 +17,7 @@ You interact with Devin normally in this chat window using natural language. You
                                      ▼
  ┌────────────────────────────────────────────────────────────────────────┐
  │ 2. Devin runs in the background:                                       │
- │    $ ndc brief --task "Add pagination and filtering to /devices"       │
+ │     $ devin-context brief --task "<task summary>"                      │
  └───────────────────────────────────┬────────────────────────────────────┘
                                      │
                                      ▼
@@ -36,14 +36,14 @@ You interact with Devin normally in this chat window using natural language. You
  └────────────────────────────────────────────────────────────────────────┘
 ```
 
-### How Does Devin Know to Use `ndc`?
+### How Does Devin Know to Use `devin-context`?
 
-When you initialize your repository with `ndc init`, it sets up two mechanisms that instruct Devin:
+When you initialize your repository with `devin-context init`, it sets up two mechanisms that instruct Devin:
 
-1. **`AGENTS.md` Instructions**: Devin reads `AGENTS.md` automatically at the start of every session. `ndc init` inserts rules telling Devin to run `ndc brief` before starting non-trivial tasks and `ndc closeout` / `ndc handoff` after finishing work.
-2. **Devin Project Skill (`.devin/skills/ngc-devin-context/SKILL.md`)**: Teaches Devin the exact syntax for creating proposals and recording decisions.
+1. **`AGENTS.md` Instructions**: Devin reads `AGENTS.md` automatically at the start of every session. `devin-context init` inserts rules telling Devin to run `devin-context brief` before starting non-trivial tasks and `devin-context closeout` / `devin-context handoff` after finishing work.
+2. **Devin Project Skill (`.devin/skills/devin-context/SKILL.md`)**: Teaches Devin the exact syntax for creating proposals and recording decisions.
 
-Because Devin has terminal access, it translates your conversational requests (*"record a decision..."*, *"leave a handoff..."*) into the appropriate `ndc` background commands automatically.
+Because Devin has terminal access, it translates your conversational requests (*"record a decision..."*, *"leave a handoff..."*) into the appropriate `devin-context` background commands automatically.
 
 ---
 
@@ -52,51 +52,41 @@ Because Devin has terminal access, it translates your conversational requests (*
 ### Prerequisites
 - **Python**: `>=3.8`
 - **Node.js**: `>=20` (installed and available in `PATH`)
-- **Windows System Certificates** (recommended on NGC machines):
-  ```bash
-  pip install pip-system-certs
-  ```
 
-### Install from Enterprise Nexus PyPI
+### Install from PyPI
 
 #### Option A: Using `pip`
 ```bash
-pip install ngc-devin-context --index-url https://nexus-repository.northgrum.com/repository/pypi-ng-releases/simple/
-```
-
-To configure `pip` globally so you don't need `--index-url` each time, add to `C:\Users\<Your_ID>\pip\pip.ini` (or `~/.pip/pip.conf` on Linux):
-```ini
-[global]
-index-url = https://nexus-repository.northgrum.com/repository/pypi-ng-releases/simple/
+pip install devin-context
 ```
 
 #### Option B: Using `uv`
 ```bash
 # Add as a project dependency
-uv add ngc-devin-context --index-url https://nexus-repository.northgrum.com/repository/pypi-ng-releases/simple/
+uv add devin-context
 
 # Or install in the active environment
-uv pip install ngc-devin-context --index-url https://nexus-repository.northgrum.com/repository/pypi-ng-releases/simple/
+uv pip install devin-context
 ```
 
 #### Option C: Local Source Checkout
 ```bash
-git clone https://github.northgrum.com/J68862/ng-devin-context.git
-cd ng-devin-context
+git clone https://github.com/mrpomegranate/devin-context.git
+cd devin-context
 npm install
 pip install -e .
 ```
 
 Verify your installation:
 ```bash
-ndc help
+devin-context help
 ```
 
 ---
 
 ## 2. Core Workflows by Specification Setup
 
-NGC Devin Context works seamlessly whether your repository uses an external specification framework or operates as a standalone repository.
+Devin Context works seamlessly whether your repository uses an external specification framework or operates as a standalone repository.
 
 For every step below, you can interact either **via Chat (Natural Language)** or **via CLI**.
 
@@ -122,26 +112,26 @@ Use this setup for standard repositories where feature requirements and discussi
 └──────────┬───────────┘                   └──────────────────────┘
            │
            ▼
-  .ngc-devin/knowledge/
+  .devin-context/knowledge/
   ├── decisions/2026-11-22-offset-limit.md
   └── handoffs/2026-11-22-devices-api.md
 ```
 
 #### 1. Initialize the Project
 
-- **💬 In Chat:** *"Devin, please initialize NGC Devin Context in this repository."*
+- **💬 In Chat:** *"Devin, please initialize Devin Context in this repository."*
 - **💻 CLI Equivalent:**
   ```bash
-  ndc init
+  devin-context init
   ```
-  *(Creates `.ngc-devin/config.yaml`, `.devin/skills/`, and updates `AGENTS.md`)*
+  *(Creates `.devin-context/config.yaml`, `.devin/skills/`, and updates `AGENTS.md`)*
 
 #### 2. Start Work with Devin (Automated Retrieval)
 
 - **💬 In Chat:** *"Devin, please add pagination and filtering to the /devices endpoint."*
 - **💻 What Devin runs in background:**
   ```bash
-  ndc brief --task "Add pagination and filtering to the /devices endpoint"
+  devin-context brief --task "Add pagination and filtering to the /devices endpoint"
   ```
   Devin receives matching project rules, prior decisions, validation commands, and current Git status before writing any code.
 
@@ -150,13 +140,13 @@ Use this setup for standard repositories where feature requirements and discussi
 - **💬 In Chat:** *"Devin, record a decision that we use offset-limit pagination with a default limit of 50 and max limit of 100 to prevent database memory spikes."*
 - **💻 What Devin runs in background:**
   ```bash
-  ndc decision create "Use offset-limit pagination with a default limit of 50" \
+  devin-context decision create "Use offset-limit pagination with a default limit of 50" \
     --body "All list endpoints must accept 'limit' and 'offset' query parameters. Cap max limit at 100 to prevent database memory spikes."
   ```
 - **💬 In Chat Approval:** *"Looks good, please approve the pagination decision proposal."*
 - **💻 CLI Equivalent:**
   ```bash
-  ndc approve .ngc-devin/proposals/2026-11-22-use-offset-limit-pagination.md
+  devin-context approve .devin-context/proposals/2026-11-22-use-offset-limit-pagination.md
   ```
 
 #### 4. Leave a Session Handoff
@@ -164,9 +154,9 @@ Use this setup for standard repositories where feature requirements and discussi
 - **💬 In Chat:** *"I'm signing off for today. Please leave a handoff summarizing what we completed and what remains for tomorrow."*
 - **💻 What Devin runs in background:**
   ```bash
-  ndc handoff create "Devices API pagination state" \
+  devin-context handoff create "Devices API pagination state" \
     --body "Database queries and backend route pagination are complete and unit tests pass. Next step: connect the frontend table pagination controls."
-  ndc approve .ngc-devin/proposals/<handoff-file>.md
+  devin-context approve .devin-context/proposals/<handoff-file>.md
   ```
   Tomorrow, the next Devin session will automatically pull this handoff and resume without needing repeated context.
 
@@ -177,9 +167,9 @@ Use this setup for standard repositories where feature requirements and discussi
 Use this setup when your team uses **OpenSpec** (`openspec/`) to define formal changes, requirements, design documents, and task lists.
 
 ```text
-  OpenSpec (Requirements Authority)         NGC Devin Context (Durable Rules)
+  OpenSpec (Requirements Authority)         Devin Context (Durable Rules)
 ┌─────────────────────────────────┐       ┌─────────────────────────────────┐
-│ openspec/changes/DEV-102/       │       │ .ngc-devin/knowledge/           │
+│ openspec/changes/DEV-102/       │       │ .devin-context/knowledge/          │
 │ ├── spec.md  (Requirements)    │   +   │ ├── decisions/ (Alembic only)   │
 │ └── tasks.md (Task checklist)   │       │ └── runbooks/  (Test commands)  │
 └────────────────┬────────────────┘       └────────────────┬────────────────┘
@@ -195,7 +185,7 @@ Use this setup when your team uses **OpenSpec** (`openspec/`) to define formal c
 - **💬 In Chat:** *"Devin, check our specification setup."*
 - **💻 CLI Equivalent:**
   ```bash
-  ndc spec detect
+  devin-context spec detect
   ```
   *(Outputs `"provider": "openspec"` and confirms `openspec/` is detected)*
 
@@ -204,7 +194,7 @@ Use this setup when your team uses **OpenSpec** (`openspec/`) to define formal c
 - **💬 In Chat:** *"Devin, please implement OpenSpec change DEV-102 (device health check endpoint)."*
 - **💻 What Devin runs in background:**
   ```bash
-  ndc brief --task "Implement device health check endpoint" --spec DEV-102
+  devin-context brief --task "Implement device health check endpoint" --spec DEV-102
   ```
   Devin loads the OpenSpec requirements as the **authoritative task roadmap** while also loading your team's prior decisions and test commands.
 
@@ -213,10 +203,10 @@ Use this setup when your team uses **OpenSpec** (`openspec/`) to define formal c
 - **💬 In Chat:** *"Save a closeout lesson: health checks to external sensor services must always set an explicit 5-second timeout."*
 - **💻 What Devin runs in background:**
   ```bash
-  ndc closeout --title "Always set HTTP timeouts on external health checks" \
+  devin-context closeout --title "Always set HTTP timeouts on external health checks" \
     --spec DEV-102 \
     --body "Health checks to external sensor services must specify a 5-second timeout; without it, network drops cause worker threads to hang indefinitely."
-  ndc approve .ngc-devin/proposals/<closeout-file>.md
+  devin-context approve .devin-context/proposals/<closeout-file>.md
   ```
 
 ---
@@ -230,7 +220,7 @@ Use this setup when your team uses **Spec-Kitty** (`.specify/`) for specificatio
 - **💬 In Chat:** *"Devin, detect our spec provider."*
 - **💻 CLI Equivalent:**
   ```bash
-  ndc spec detect
+  devin-context spec detect
   ```
   *(Outputs `"provider": "spec-kitty"` and confirms `.specify/` is detected)*
 
@@ -239,7 +229,7 @@ Use this setup when your team uses **Spec-Kitty** (`.specify/`) for specificatio
 - **💬 In Chat:** *"Devin, implement Spec-Kitty feature user-notifications (add email alerts on device disconnect)."*
 - **💻 What Devin runs in background:**
   ```bash
-  ndc brief --task "Add email alerts on device disconnect" --spec user-notifications
+  devin-context brief --task "Add email alerts on device disconnect" --spec user-notifications
   ```
 
 #### 3. Recording a Decision with Spec Link
@@ -247,20 +237,20 @@ Use this setup when your team uses **Spec-Kitty** (`.specify/`) for specificatio
 - **💬 In Chat:** *"Record a decision for user-notifications that notification emails must be dispatched asynchronously via background workers."*
 - **💻 What Devin runs in background:**
   ```bash
-  ndc decision create "Dispatch notification emails asynchronously via background workers" \
+  devin-context decision create "Dispatch notification emails asynchronously via background workers" \
     --spec user-notifications \
     --body "Sending emails synchronously in the HTTP request handler blocks the client response. Always enqueue email tasks."
-  ndc approve .ngc-devin/proposals/<proposal-file>.md
+  devin-context approve .devin-context/proposals/<proposal-file>.md
   ```
 
 ---
 
 ## 3. USE CASES:
-### 1. Pull Request (PR) Workflows with Devin & NDC
+### 1. Pull Request (PR) Workflows with Devin & Devin Context
 
 Pull Requests are where persistent context and AI assistance deliver the highest team value:
 1. **When creating a PR**: You can preserve decisions and lessons so context isn't lost upon merge.
-2. **When reviewing a PR**: Devin can automatically audit your colleague's PR against your team's recorded rules in `.ngc-devin/knowledge/`.
+2. **When reviewing a PR**: Devin can automatically audit your colleague's PR against your team's recorded rules in `.devin-context/knowledge/`.
 
 ---
 
@@ -270,7 +260,7 @@ When you finish a feature and want to open a Pull Request:
 
 ##### 1. Ask Devin in Chat
 > **You:**  
-> *"Devin, please create a new branch `feat/devices-pagination`, run the test suite, save our decisions and closeout lessons in NDC, push the branch to origin, and draft a PR description."*
+> *"Devin, please create a new branch `feat/devices-pagination`, run the test suite, save our decisions and closeout lessons in Devin Context, push the branch to origin, and draft a PR description."*
 
 ##### 2. What Devin Does Behind the Scenes
 1. **Branches and commits cleanly**:
@@ -281,8 +271,8 @@ When you finish a feature and want to open a Pull Request:
    ```
 2. **Records durable decisions & closeout lessons**:
    ```bash
-   ndc decision create "Use offset-limit pagination with default limit of 50" --body "..."
-   ndc approve .ngc-devin/proposals/2026-11-22-use-offset-limit-pagination.md
+   devin-context decision create "Use offset-limit pagination with default limit of 50" --body "..."
+   devin-context approve .devin-context/proposals/2026-11-22-use-offset-limit-pagination.md
    ```
 3. **Pushes branch to remote**:
    ```bash
@@ -294,7 +284,7 @@ When you finish a feature and want to open a Pull Request:
    Implements offset-limit pagination for the `/devices` endpoint with a default limit of 50 (capped at 100).
 
    ## Architectural Decisions Recorded
-   - Added `.ngc-devin/knowledge/decisions/2026-11-22-use-offset-limit-pagination.md`
+   - Added `.devin-context/knowledge/decisions/2026-11-22-use-offset-limit-pagination.md`
 
    ## Verification
    - `npm test`: 8/8 tests pass
@@ -303,7 +293,7 @@ When you finish a feature and want to open a Pull Request:
 
 ---
 
-#### Workflow 2: Reviewing a Colleague's PR with Devin & NDC
+#### Workflow 2: Reviewing a Colleague's PR with Devin & Devin Context
 
 When a teammate opens a PR and asks you for a code review, you can ask Devin to perform a thorough, objective audit.
 
@@ -320,7 +310,7 @@ When a teammate opens a PR and asks you for a code review, you can ask Devin to 
                             │
                             ▼
  ┌────────────────────────────────────────────────────────┐
- │ 3. Devin cross-references `.ngc-devin/knowledge/`:     │
+ │ 3. Devin cross-references `.devin-context/knowledge/`:     │
  │    • Did the PR follow pagination limits?              │
  │    • Did the PR use Alembic instead of raw DDL?        │
  │    • Did the PR mock external network calls in tests?  │
@@ -335,7 +325,7 @@ When a teammate opens a PR and asks you for a code review, you can ask Devin to 
 ##### 1. Ask Devin in Chat
 > **You:**  
 > *"Devin, please fetch and check out branch `feat/user-search` (PR #14) and review the diff against `main`. Check for:*
-> 1. *Adherence to our project rules in `.ngc-devin/knowledge/` (e.g. pagination limit, Alembic migrations, mocking external APIs).*
+> 1. *Adherence to our project rules in `.devin-context/knowledge/` (e.g. pagination limit, Alembic migrations, mocking external APIs).*
 > 2. *Edge cases, input validation, and missing error handling.*
 > 3. *Run all test suites.*
 > 4. *Draft a constructive PR review summary with line-by-line feedback."*
@@ -345,7 +335,7 @@ When a teammate opens a PR and asks you for a code review, you can ask Devin to 
 git fetch origin
 git checkout feat/user-search
 git diff main...HEAD
-ndc brief --task "Review user search PR"
+devin-context brief --task "Review user search PR"
 npm test
 ```
 
@@ -362,7 +352,7 @@ Devin generates a formatted review ready to paste directly into GitHub:
 
 ### Review Feedback
 1. **Adherence to Project Decisions**:
-   - `src/api/routes.py:42`: Uses `limit=500` by default. Our project standard (`.ngc-devin/knowledge/decisions/2026-11-22-use-offset-limit-pagination.md`) caps maximum limit at `100` to prevent memory spikes.
+   - `src/api/routes.py:42`: Uses `limit=500` by default. Our project standard (`.devin-context/knowledge/decisions/2026-11-22-use-offset-limit-pagination.md`) caps maximum limit at `100` to prevent memory spikes.
 2. **Edge Case / Error Handling**:
    - `src/services/search.py:88`: If `start_date > end_date`, the query returns an unhandled 500 database error instead of a 400 Bad Request.
 3. **Praise**:
@@ -375,18 +365,18 @@ Devin generates a formatted review ready to paste directly into GitHub:
 
 | Action | 💬 How to Prompt in Chat | 💻 CLI Equivalent Command |
 | :--- | :--- | :--- |
-| **Initialize Repo** | *"Initialize NGC Devin Context here."* | `ndc init` |
-| **Retrieve Context** | *(Automatic when you assign tasks)* | `ndc brief --task "Export telemetry to CSV"` |
-| **Link Specification** | *"Implement OpenSpec change DEV-102."* | `ndc brief --task "Fix calibration" --spec DEV-102` |
-| **Record Decision** | *"Record decision: use Alembic for DB migrations, never raw SQL."* | `ndc decision create "Use Alembic migrations" --body "..."` |
-| **Global Rule** | *"Record a global rule: never log bearer tokens or PII."* | `ndc decision create "Security guidelines" --scope global --approve --body "..."` |
-| **Session Handoff** | *"I'm signing off. Leave a handoff for where we left off."* | `ndc handoff create "Onboarding wizard state" --body "..."` |
-| **Save Lesson** | *"Record a closeout lesson: reading CSVs >1GB requires chunksize."* | `ndc closeout --title "Pandas CSV memory overflow" --body "..."` |
-| **Approve Proposal** | *"Approve the pending decision proposal."* | `ndc approve .ngc-devin/proposals/<file>.md` |
-| **Search Knowledge** | *"Search context for pagination rules."* | `ndc search "pagination"` |
-| **Review PR** | *"Checkout branch feat/pr-12 and review against project rules."* | `git diff main...HEAD && ndc search "..."` |
-| **Check Config** | *"Show current NGC Devin Context config."* | `ndc config show --resolved` |
-| **Detect Specs** | *"Check if OpenSpec or Spec-Kitty is configured."* | `ndc spec detect` |
+| **Initialize Repo** | *"Initialize Devin Context here."* | `devin-context init` |
+| **Retrieve Context** | *(Automatic when you assign tasks)* | `devin-context brief --task "Export telemetry to CSV"` |
+| **Link Specification** | *"Implement OpenSpec change DEV-102."* | `devin-context brief --task "Fix calibration" --spec DEV-102` |
+| **Record Decision** | *"Record decision: use Alembic for DB migrations, never raw SQL."* | `devin-context decision create "Use Alembic migrations" --body "..."` |
+| **Global Rule** | *"Record a global rule: never log bearer tokens or PII."* | `devin-context decision create "Security guidelines" --scope global --approve --body "..."` |
+| **Session Handoff** | *"I'm signing off. Leave a handoff for where we left off."* | `devin-context handoff create "Onboarding wizard state" --body "..."` |
+| **Save Lesson** | *"Record a closeout lesson: reading CSVs >1GB requires chunksize."* | `devin-context closeout --title "Pandas CSV memory overflow" --body "..."` |
+| **Approve Proposal** | *"Approve the pending decision proposal."* | `devin-context approve .devin-context/proposals/<file>.md` |
+| **Search Knowledge** | *"Search context for pagination rules."* | `devin-context search "pagination"` |
+| **Review PR** | *"Checkout branch feat/pr-12 and review against project rules."* | `git diff main...HEAD && devin-context search "..."` |
+| **Check Config** | *"Show current Devin Context config."* | `devin-context config show --resolved` |
+| **Detect Specs** | *"Check if OpenSpec or Spec-Kitty is configured."* | `devin-context spec detect` |
 
 ---
 
@@ -394,7 +384,7 @@ Devin generates a formatted review ready to paste directly into GitHub:
 
 | Scope | Location | How to Specify in Chat | Storage & Sharing | Intended Use |
 | :--- | :--- | :--- | :--- | :--- |
-| **`project`** *(Default)* | `.ngc-devin/knowledge/` | Default (*"Record a project decision..."*) | Committed to Git and shared with teammates | Architecture decisions, repo-specific handoffs, project test rules |
-| **`global`** | `~/.config/ngc-devin/knowledge/` | *"Record a **global** decision across all my repos..."* | Stored in user home directory; private to your machine | Personal standards, cross-repository business goals, general lessons |
+| **`project`** *(Default)* | `.devin-context/knowledge/` | Default (*"Record a project decision..."*) | Committed to Git and shared with teammates | Architecture decisions, repo-specific handoffs, project test rules |
+| **`global`** | `~/.config/devin-context/knowledge/` | *"Record a **global** decision across all my repos..."* | Stored in user home directory; private to your machine | Personal standards, cross-repository business goals, general lessons |
 
-> **Security Note**: Never store credentials, API keys, passwords, or secrets in any NGC Devin Context record.
+> **Security Note**: Never store credentials, API keys, passwords, or secrets in any Devin Context record.

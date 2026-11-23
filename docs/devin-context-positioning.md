@@ -1,8 +1,8 @@
-# NGC Devin Context: Positioning and Integration
+# Devin Context: Positioning and Integration
 
 ## Purpose
 
-NGC Devin Context is a clean-room, Devin-native persistent context and
+Devin Context is a clean-room, Devin-native persistent context and
 knowledge layer. It addresses a recurring limitation of coding-agent work:
 important project understanding is lost between sessions, repositories, and
 handoffs.
@@ -34,18 +34,18 @@ OpenSpec and Spec-Kitty are expected to be spec-driven development tools: they
 organize the intent, requirements, design, implementation plan, and acceptance
 criteria for a specific feature or change.
 
-NGC Devin Context is complementary. It should use those spec artifacts as
+Devin Context is complementary. It should use those spec artifacts as
 authoritative inputs rather than copying or replacing them.
 
 | Tool | Primary unit | Primary question | Typical lifetime |
 | --- | --- | --- | --- |
 | OpenSpec / Spec-Kitty | Feature, change, or task | What should be built, and how should this change be executed? | The change lifecycle |
 | Devin CLI | Active working session | How should the requested work be investigated, implemented, and validated now? | One session or task |
-| NGC Devin Context | Durable project and team knowledge | What must Devin know to work correctly, and what should be retained for future work? | Across sessions, specifications, and repositories |
+| Devin Context | Durable project and team knowledge | What must Devin know to work correctly, and what should be retained for future work? | Across sessions, specifications, and repositories |
 
-### What NGC Devin Context Solves
+### What Devin Context Solves
 
-NGC Devin Context provides capabilities that are usually outside the scope of a
+Devin Context provides capabilities that are usually outside the scope of a
 feature-specification workflow:
 
 1. **Cross-session continuity**  
@@ -78,7 +78,7 @@ feature-specification workflow:
 ## Integration Model
 
 OpenSpec or Spec-Kitty remains the source of truth for the feature
-requirements, design, plan, and task list. NGC Devin Context resolves
+requirements, design, plan, and task list. Devin Context resolves
 additional project knowledge and produces a concise task-specific Context Pack
 for Devin.
 
@@ -88,7 +88,7 @@ OpenSpec / Spec-Kitty
              |
              | task identifier and stable artifact links
              v
-NGC Devin Context
+Devin Context
   project knowledge, decisions, handoffs, evidence, and risks
              |
              | Context Pack
@@ -98,7 +98,7 @@ Devin CLI
              |
              | proposed durable knowledge
              v
-NGC Devin Context
+Devin Context
   handoff, decision, runbook, lesson, and validation evidence
              |
              v
@@ -111,7 +111,7 @@ For a request such as `OPS-184 telemetry retry policy`:
 
 1. OpenSpec or Spec-Kitty supplies the authoritative requirements, design,
    tasks, and acceptance criteria.
-2. `ndc brief --spec OPS-184` resolves:
+2. `devin-context brief --spec OPS-184` resolves:
    - Stable links to the specification artifacts
    - Related architecture decisions
    - Prior handoffs and operational lessons
@@ -192,19 +192,19 @@ until the core workflow has proven value.
 ### Commands
 
 ```text
-ndc init
-ndc brief --spec <spec-id>
-ndc context pack --task "<task summary>"
-ndc decision create "<title>"
-ndc handoff create
-ndc closeout
-ndc search "<query>"
-ndc status
+devin-context init
+devin-context brief --spec <spec-id>
+devin-context context pack --task "<task summary>"
+devin-context decision create "<title>"
+devin-context handoff create
+devin-context closeout
+devin-context search "<query>"
+devin-context status
 ```
 
 ### MVP Capabilities
 
-- Initialize a managed NGC Devin Context block in project `AGENTS.md` without
+- Initialize a managed Devin Context block in project `AGENTS.md` without
   overwriting existing project guidance
 - Create and retrieve task-specific Context Packs
 - Store Markdown records for project profile, decisions, handoffs, runbooks,
@@ -218,7 +218,7 @@ ndc status
 ### Suggested Local Layout
 
 ```text
-.ngc-devin/
+.devin-context/
   config.yaml
   knowledge/
     project-profile.md
@@ -243,7 +243,7 @@ ndc status
 
 ## Product Positioning
 
-> NGC Devin Context is the trusted, governed memory and context layer for
+> Devin Context is the trusted, governed memory and context layer for
 > Devin. It connects specifications to repository evidence and carries
 > validated knowledge from one Devin task to the next.
 
