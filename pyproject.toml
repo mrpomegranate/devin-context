@@ -1,0 +1,35 @@
+[build-system]
+requires = ["setuptools>=61.0", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "ngc-devin-context"
+version = "0.1.0"
+description = "Persistent, evidence-backed context for Devin across sessions, specifications, and repositories."
+readme = "README.md"
+requires-python = ">=3.8"
+authors = [
+    { name = "J68862, Northrop Grumman" }
+]
+keywords = ["devin", "ai", "context", "northrop-grumman", "openspec", "spec-kitty"]
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "Programming Language :: JavaScript",
+    "Operating System :: OS Independent",
+]
+dependencies = []
+
+[project.scripts]
+ndc = "ngc_devin_context.cli:main"
+ngc-devin-context = "ngc_devin_context.cli:main"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+include = ["ngc_devin_context*"]
+
+[tool.setuptools.package-data]
+ngc_devin_context = [
+    "py.typed",
+    "_js/**/*",
+    "_js/**",
+]

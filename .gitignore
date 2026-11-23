@@ -1,0 +1,12 @@
+node_modules/
+coverage/
+.ngc-devin/index.sqlite
+.ngc-devin/audit/
+dist/
+build/
+*.egg-info/
+__pycache__/
+*.py[cod]
+.env
+.venv/
+
